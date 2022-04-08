@@ -3,11 +3,14 @@ from fastapi import FastAPI
 from models import User
 from fastapi.middleware.cors import CORSMiddleware
 
+from config import Config
 
 app = FastAPI()
 app.add_middleware(
 	CORSMiddleware
 )
+
+App = Config('App')
 
 
 @app.get('/')
@@ -19,4 +22,9 @@ async def users(user_id: int):
 	return {'msg': f'Users {user_id}'}
 
 if __name__ == "__main__":
-    run("main:app", host="127.0.0.1", port=8000, reload=True, log_level="info")
+    run(
+    	f"main:{App['app_name']}",
+    	host=App['host'],
+    	port=App['port'],
+    	reload=App['reload'],
+    	log_level=App['log_level'])
